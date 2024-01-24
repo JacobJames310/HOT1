@@ -1,0 +1,52 @@
+﻿@using HOT1.Models
+@model OrderFormModel
+@{
+	Layout = "_Layout";
+	ViewBag.Title = "Order Form";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Crazy Crank's T-Shirt Factory</title>
+</head>
+<body>
+    <h2>Order Form</h2>
+    <h3>Order your T-shirts here!</h3>
+
+    <form asp-action="Index" method="post">
+        <div>
+            <label for="quantity">Quantity:</label>
+        </div>
+        <div>
+            <input asp-for="Quantity" id="quantity" />
+            @Html.ValidationMessageFor(model => model.Quantity, "", new { @class = "text-danger" })
+        </div>
+        <div>
+            <label for="discountCode">Discount Code (optional):</label>
+        </div>
+        <div>
+            <input asp-for="DiscountCode" id="discountCode" />
+            @if (!string.IsNullOrEmpty(Model.DiscountMessage) && ViewData.ModelState.IsValid && Model != null)
+            {
+                <div>
+                    <span class="discount-error" style="color:@(Model.DiscountMessage.Contains("Invalid discount code.") ? "red" : "black")">
+                        @Model.DiscountMessage
+                    </span>
+                </div>
+            }
+        </div>
+
+        <button type="submit">Order</button>
+    </form>
+
+    @if (ViewData.ModelState.IsValid && Model != null)
+    {
+        <div class="order-summary-border">
+            <p>Subtotal: @Model.Subtotal.ToString("C")</p>
+            <p>Tax: @Model.Tax.ToString("C")</p>
+            <p>Total: @Model.Total.ToString("C")</p>
+        </div>
+    }
+</body>
+</html>
